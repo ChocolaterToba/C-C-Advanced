@@ -2,7 +2,7 @@
 #include <stdio.h>
 
 int main() {
-    printf("Please input array's length: ");
+    //printf("Please input array's length: ");
     size_t inputSize = 0;
     if (scanf("%lu", &inputSize) != 1) {
         perror("Error when reading array's length\n");
@@ -15,7 +15,7 @@ int main() {
         return EXIT_FAILURE;
     }
 
-    printf("Please input array's elements, separated by space or enter\n");
+    //printf("Please input array's elements, separated by space or enter\n");
     for (size_t i = 0; i < inputSize; ++i) {
         if (scanf("%u", inputArray + i) != 1) {
             perror("Error when reading array's element\n");
@@ -36,13 +36,13 @@ int main() {
     for (size_t i = 0; i < outputSize; ++i) {
         printf("%d ,", *outputArray[0][i]);
     }
-    printf("\b\b] \n");
+    printf("\b\b]\n");
 
     printf("Frequences: [");
     for (size_t i = 0; i < outputSize; ++i) {
         printf("%d ,", *outputArray[1][i]);
     }
-    printf("\b\b] \n");
+    printf("\b\b]\n");
 
     free(inputArray);
     free(outputArray[0]);

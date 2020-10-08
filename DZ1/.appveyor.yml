@@ -41,12 +41,12 @@ build_script:
     # скрипт сборки проекта:
     - mkdir build
     - cd build
-    - cmake .. %CMAKE_CONFIGURE_FLAGS%
-    - cmake --build . %CMAKE_BUILD_FLAGS%
+    - cmake ..
+    - cmake . && cmake --build . && ctest .
 
 test_script:
     # скрипт тестирования проекта:
-    - ctest -C %CONFIGURATION% --output-on-failure
+    - ctest --output-on-failure
 
 artifacts:
     - path: <local-package-path>

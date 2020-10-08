@@ -11,3 +11,10 @@ include_directories(includes)
 file(GLOB SOURCES src/*.c)
 
 add_executable(${EXEC} ${SOURCES})
+
+enable_testing()
+
+add_test(FirstTest a.out 1 1)
+
+set_tests_properties(FirstTest PROPERTIES
+PASS_REGULAR_EXPRESSION "Numbers: [1]\nFrequences: [1]\n")
