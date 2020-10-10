@@ -3,11 +3,12 @@
 #include "processi.h"
 #include "processo.h"
 #include "make_histogram.h"
+#include "nesting_free.h"
 
 int main() {
     int* inputArray = NULL;
     size_t inputSize = 0;
-    if (Processi(stdin, inputArray, &inputSize) == EXIT_FAILURE) {
+    if (Processi(stdin, &inputArray, &inputSize) == EXIT_FAILURE) {
         return EXIT_FAILURE;
     }
 

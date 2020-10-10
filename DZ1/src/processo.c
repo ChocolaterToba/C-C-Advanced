@@ -10,23 +10,25 @@ int Processo (FILE* outfile, int** const outputArray[2], size_t outputSize) {
         return EXIT_FAILURE;
     }
 
-    for (size_t i = 0; i < outputSize; ++i) {
-        if (fprintf(outfile, "%d ,", *outputArray[0][i]) != 1) {
+    for (size_t i = 0; i < outputSize - 1; ++i) {
+        if (fprintf(outfile, "%d ,", *outputArray[0][i]) < 0) {
             return EXIT_FAILURE;
         }
     }
-
-    if (fprintf(outfile, "\b\b]\nFrequences: [") != 17) {
+    if (fprintf(outfile, "%d]\n", *outputArray[0][outputSize - 1]) < 0) {
         return EXIT_FAILURE;
     }
 
-    for (size_t i = 0; i < outputSize; ++i) {
-        if (fprintf(outfile, "%d ,", *outputArray[1][i]) != 1) {
+    if (fprintf(outfile, "Frequences: [") != 13) {
+        return EXIT_FAILURE;
+    }
+
+    for (size_t i = 0; i < outputSize - 1; ++i) {
+        if (fprintf(outfile, "%d ,", *outputArray[1][i]) < 0) {
             return EXIT_FAILURE;
         }
     }
-
-    if (fprintf(outfile, "\b\b]\n") !=4) {
+    if (fprintf(outfile, "%d]\n", *outputArray[1][outputSize - 1]) < 0) {
         return EXIT_FAILURE;
     }
 

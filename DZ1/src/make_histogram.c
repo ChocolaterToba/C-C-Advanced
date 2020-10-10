@@ -1,10 +1,10 @@
 #include <stdlib.h>
 #include "nesting_free.h"
 
-
 int MakeHistogram(int* inputArray, size_t inputSize,
                   int** outputArray[2], size_t* outputSize) {
-    if (inputArray == NULL || outputArray [0] != NULL || outputArray[1] != NULL) {
+
+    if (inputArray == NULL || outputArray[0] != NULL || outputArray[1] != NULL) {
         return EXIT_FAILURE;
     }
 
