@@ -1,26 +1,26 @@
 #include <stdlib.h>
 #include "nesting_free.h"
 
+
 int MakeHistogram(int* inputArray, size_t inputSize,
                   int** outputArray[2], size_t* outputSize) {
-    if (inputArray == NULL) {
-        return EXIT_SUCCESS;
+    if (inputArray == NULL || outputArray [0] != NULL || outputArray[1] != NULL) {
+        return EXIT_FAILURE;
     }
 
     *outputSize = 0;
     size_t actualSize = 8;
     outputArray[0] = (int**) calloc(actualSize, sizeof(int*));
     if (outputArray[0] == NULL) {
-        perror("Could not allocate memory for output numbers array\n");
         return EXIT_FAILURE;
     }
 
     outputArray[1] = (int**) calloc(actualSize, sizeof(int*));
     if (outputArray[1] == NULL) {
-        perror("Could not allocate memory for output frequences array\n");
         free(outputArray[0]);
         return EXIT_FAILURE;
     }
+
     for (size_t i = 0; i < inputSize; ++i) {
         size_t j = 0;
         for (j; j < *outputSize; j++) {
@@ -37,7 +37,6 @@ int MakeHistogram(int* inputArray, size_t inputSize,
                 if (newOutputNumbers == NULL || newOutputFrequences == NULL) {
                     free(outputArray[0]);
                     NestingFree(outputArray[1], j);
-                    perror("Could not reallocate memory for output arrays\n");
                     return EXIT_FAILURE;
                 }
 
@@ -50,7 +49,6 @@ int MakeHistogram(int* inputArray, size_t inputSize,
             if (outputArray[1][j] == NULL) {
                 free(outputArray[0]);
                 NestingFree(outputArray[1], j);
-                perror("Could not allocate memory for single frequency\n");
                 return EXIT_FAILURE;
             }
 
