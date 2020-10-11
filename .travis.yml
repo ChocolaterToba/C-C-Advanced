@@ -1,4 +1,12 @@
 dist:     trusty    # используем Ubuntu 14.04 Trusty Tahr (а не 12.02 Precise Pangolin)
+addons:
+     snaps:
+       - name: cmake
+         confinement: classic
+         #channel: latest/candidate
+         channel: 3.18/candidate
+         #channel: 3.17/beta
+
 sudo:     required  # используем Virtual Machine (а не Docker container)
 
 language: cpp
@@ -33,8 +41,9 @@ matrix:
           env: TARGET_CPU=x86 BUILD_CONFIGURATION=Release
 
 install:
-    # скрипт настройки среды и установки зависимостей:
-    - source ci/travis/install-$TRAVIS_OS_NAME.sh
+    - sudo apt-get purge cmake 
+    - sudo apt-get install snapd
+    - sudo snap install cmake --classic
 
 script:
     # скрипт сборки и тестирования проекта:
