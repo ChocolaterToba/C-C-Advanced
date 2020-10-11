@@ -40,12 +40,9 @@ script:
     # скрипт сборки и тестирования проекта:
     - mkdir build
     - cd build
-    # тестирование (с параметром -DTESTING=ON)
     - cmake .. -DCMAKE_BUILD_TYPE=$BUILD_CONFIGURATION -DTARGET_CPU=$TARGET_CPU -DTESTING=ON
     - cmake --build .
-    # сама сборка
-    - cmake .. -DCMAKE_BUILD_TYPE=$BUILD_CONFIGURATION -DTARGET_CPU=$TARGET_CPU
-    - cmake --build .
+    - ctest
 
 deploy:
     # выкладываем tagged-коммиты на GitHub Releases:

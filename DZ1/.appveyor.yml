@@ -35,19 +35,17 @@ install:
 
     - appveyor DownloadFile <url> -FileName <local-file>
     - 7z e -y <local-file> -o<local-dir>
-    - ...
 
 build_script:
     # скрипт сборки проекта:
     - mkdir build
     - cd build
-    - cmake ..
-    - cmake . && cmake --build .
+    - cmake .. -DTESTING=ON
+    - cmake --build .
 
 test_script:
     # скрипт тестирования проекта:
-    - cmake .. -DTESTING=ON
-    - cmake --build .
+    - ctest
 
 artifacts:
     - path: <local-package-path>
