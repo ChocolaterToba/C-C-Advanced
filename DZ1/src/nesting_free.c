@@ -6,5 +6,6 @@ void NestingFree(int** array, size_t size) {
             free(array[i]);  //  Freeing nested arrays with single numbers in them.
         }
         free(array);
+        array = NULL;
     }
 }

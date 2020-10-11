@@ -21,6 +21,7 @@ int Processi(FILE* infile, int** inputArray, size_t* inputSize) {
     for (size_t i = 0; i < *inputSize; ++i) {
         if (fscanf(infile, "%d", *inputArray + i) != 1) {
             free(*inputArray);
+            *inputArray = NULL;
             return EXIT_FAILURE;
         }
     }

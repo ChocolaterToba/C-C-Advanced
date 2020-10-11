@@ -18,6 +18,7 @@ int MakeHistogram(int* inputArray, size_t inputSize,
     outputArray[1] = (int**) calloc(actualSize, sizeof(int*));
     if (outputArray[1] == NULL) {
         free(outputArray[0]);
+        outputArray[0] = NULL;
         return EXIT_FAILURE;
     }
 
@@ -37,6 +38,8 @@ int MakeHistogram(int* inputArray, size_t inputSize,
                 if (newOutputNumbers == NULL || newOutputFrequences == NULL) {
                     free(outputArray[0]);
                     NestingFree(outputArray[1], j);
+                    outputArray[0] = NULL;
+                    outputArray[1] = NULL;
                     return EXIT_FAILURE;
                 }
 
@@ -49,6 +52,8 @@ int MakeHistogram(int* inputArray, size_t inputSize,
             if (outputArray[1][j] == NULL) {
                 free(outputArray[0]);
                 NestingFree(outputArray[1], j);
+                outputArray[0] = NULL;
+                outputArray[1] = NULL;
                 return EXIT_FAILURE;
             }
 

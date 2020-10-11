@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-int Processo (FILE* outfile, int** const outputArray[2], size_t outputSize) {
+int Processo(FILE* outfile, int** outputArray[2], size_t outputSize) {
     if (outfile == NULL || outputArray == NULL) {
         return EXIT_FAILURE;
     }
@@ -11,7 +11,7 @@ int Processo (FILE* outfile, int** const outputArray[2], size_t outputSize) {
     }
 
     for (size_t i = 0; i < outputSize - 1; ++i) {
-        if (fprintf(outfile, "%d ,", *outputArray[0][i]) < 0) {
+        if (fprintf(outfile, "%d, ", *outputArray[0][i]) < 0) {
             return EXIT_FAILURE;
         }
     }
@@ -24,7 +24,7 @@ int Processo (FILE* outfile, int** const outputArray[2], size_t outputSize) {
     }
 
     for (size_t i = 0; i < outputSize - 1; ++i) {
-        if (fprintf(outfile, "%d ,", *outputArray[1][i]) < 0) {
+        if (fprintf(outfile, "%d, ", *outputArray[1][i]) < 0) {
             return EXIT_FAILURE;
         }
     }
