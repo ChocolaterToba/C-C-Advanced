@@ -42,11 +42,12 @@ build_script:
     - mkdir build
     - cd build
     - cmake ..
-    - cmake . && cmake --build . && ctest .
+    - cmake . && cmake --build .
 
 test_script:
     # скрипт тестирования проекта:
-    - ctest --output-on-failure
+    - cmake .. -DTESTING=ON
+    - cmake --build .
 
 artifacts:
     - path: <local-package-path>
