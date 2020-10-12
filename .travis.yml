@@ -41,9 +41,8 @@ matrix:
           env: TARGET_CPU=x86 BUILD_CONFIGURATION=Release
 
 install:
-    - sudo apt-get purge cmake 
-    - sudo apt-get install snapd
-    - sudo snap install cmake --classic
+    # скрипт настройки среды и установки зависимостей:
+    - source ci/travis/install-$TRAVIS_OS_NAME.sh
 
 script:
     # скрипт сборки и тестирования проекта:
