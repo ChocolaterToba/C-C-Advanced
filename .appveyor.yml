@@ -33,9 +33,6 @@ install:
     # скрипт настройки среды и установки зависимостей:
     - call ci\appveyor\set-env.bat %TOOLCHAIN% %PLATFORM%
 
-    - appveyor DownloadFile <url> -FileName <local-file>
-    - 7z e -y <local-file> -o<local-dir>
-
 build_script:
     # скрипт сборки проекта:
     - mkdir build
@@ -46,10 +43,6 @@ build_script:
 test_script:
     # скрипт тестирования проекта:
     - ctest
-
-artifacts:
-    - path: <local-package-path>
-      name: package_name
 
 deploy:
     # выкладываем tagged-коммиты на GitHub Releases:
