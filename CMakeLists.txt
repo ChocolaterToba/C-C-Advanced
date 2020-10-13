@@ -1,7 +1,5 @@
 cmake_minimum_required(VERSION 3.14)
 
-
-
 set(PROJECT_NAME DZ1)
 project(${PROJECT_NAME})
 
@@ -34,9 +32,9 @@ target_link_libraries(${PROJECT_NAME} ${PROJECT_NAME}_lib)
 
 # Options. Turn on with 'cmake -Dmyvarname=ON'.
 #                       'cmake -TESTING=ON'.
-option(TESTING "Build all tests." OFF) # Makes boolean 'test' available.
+option(ENABLE_TESTING "Build all tests." OFF) # Makes boolean 'test' available.
 
-if (TESTING)
+if (ENABLE_TESTING)
   # Install Gtest
   include(FetchContent)
   FetchContent_Declare(
@@ -55,7 +53,18 @@ if (TESTING)
   target_link_libraries(runTests ${PROJECT_NAME}_lib)
 
   gtest_discover_tests(runTests)
+endif()
 
-  set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/.travis/cmake)
+option(ENABLE_COVERAGE "Run coverage" OFF)
 
-endif ()
+if (ENABLE_COVERAGE)
+  set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/coverage_module)
+  include(CodeCoverage)
+  append_coverage_compiler_flags()
+  setup_target_for_coverage_gcovr_html(
+    NAME coverage
+    EXECUTABLE runTests
+    DEPENDENCIES ${PROJECT_NAME} runTests
+    EXCLUDE "test/main.cpp" "build/_deps*" "src/main.c")
+  
+endif()

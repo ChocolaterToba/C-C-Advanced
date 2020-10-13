@@ -1,4 +1,4 @@
-image: Visual Studio 2015   # на этом VM-образе установлены все Visual Studio с 2008 по 2015
+image: Visual Studio 2015
 
 init:
     # секция инициализации, исполняется до клонирования проекта
@@ -37,8 +37,9 @@ build_script:
     # скрипт сборки проекта:
     - mkdir build
     - cd build
-    - cmake .. -DTESTING=ON
+    - cmake .. -DENABLE_TESTING=ON -DENABLE_COVERAGE=ON
     - cmake --build .
+    - make coverage
 
 test_script:
     # скрипт тестирования проекта:
