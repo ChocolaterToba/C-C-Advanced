@@ -139,8 +139,16 @@ elseif(NOT CMAKE_COMPILER_IS_GNUCXX)
     endif()
 endif()
 
-set(COVERAGE_COMPILER_FLAGS "-g"
-    CACHE INTERNAL "")
+#set(COVERAGE_COMPILER_FLAGS "-g -fprofile-arcs -ftest-coverage"
+#    CACHE INTERNAL "")
+
+if("${CMAKE_CXX_COMPILER_ID}" MATCHES "(Apple)?[Cc]lang")
+    set(COVERAGE_COMPILER_FLAGS "-g -fprofile-arcs -ftest-coverage"
+        CACHE INTERNAL "")
+else()
+    set(COVERAGE_COMPILER_FLAGS "--coverage"
+        CACHE INTERNAL "")
+endif()
 
 set(CMAKE_Fortran_FLAGS_COVERAGE
     ${COVERAGE_COMPILER_FLAGS}

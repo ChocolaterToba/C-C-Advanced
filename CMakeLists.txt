@@ -61,6 +61,11 @@ option(ENABLE_COVERAGE "Run coverage" OFF)
 if (ENABLE_COVERAGE)
   set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/coverage_module)
   include(CodeCoverage)
+
+  if(CMAKE_COMPILER_IS_GNUCXX)
+    target_link_libraries(runTests gcov)
+  endif()
+
   append_coverage_compiler_flags()
   setup_target_for_coverage_gcovr_html(
     NAME coverage
