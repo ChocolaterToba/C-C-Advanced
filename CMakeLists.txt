@@ -45,7 +45,7 @@ if (ENABLE_TESTING)
   FetchContent_MakeAvailable(googletest)
   include(GoogleTest)
 
-  enable_testing()
+  include(CTest)
  
   # Link runTests with what we want to test and the GTest and DZ1 library
   add_executable(runTests ${TEST_SRC_FILES})
@@ -53,6 +53,7 @@ if (ENABLE_TESTING)
   target_link_libraries(runTests ${PROJECT_NAME}_lib)
 
   gtest_discover_tests(runTests)
+
 endif()
 
 option(ENABLE_COVERAGE "Run coverage" OFF)
