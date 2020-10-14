@@ -7,8 +7,6 @@ addons:
          channel: 3.18/candidate
          #channel: 3.17/beta
 
-sudo:     required  # используем Virtual Machine (а не Docker container)
-
 language: cpp
 
 os:
@@ -58,7 +56,7 @@ deploy:
     # выкладываем tagged-коммиты на GitHub Releases:
     provider:     releases
     file:         <package-file>
-    skip_cleanup: true
+    cleanup: true
     overwrite:    true
 
     api_key:
