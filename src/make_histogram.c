@@ -24,7 +24,7 @@ int MakeHistogram(int* inputArray, size_t inputSize,
 
     for (size_t i = 0; i < inputSize; ++i) {
         size_t j = 0;
-        for (j; j < *outputSize; j++) {
+        for (; j < *outputSize; ++j) {
             if (*outputArray[0][j] == inputArray[i]) {
                 ++*outputArray[1][j];
                 break;
