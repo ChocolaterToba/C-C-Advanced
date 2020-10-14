@@ -3,8 +3,8 @@
 
 int MakeHistogram(int* inputArray, size_t inputSize,
                   int** outputArray[2], size_t* outputSize) {
-
-    if (inputArray == NULL || outputArray[0] != NULL || outputArray[1] != NULL) {
+    if (inputArray == NULL || outputArray[0] != NULL ||
+        outputArray[1] != NULL) {
         return EXIT_FAILURE;
     }
 
@@ -32,8 +32,10 @@ int MakeHistogram(int* inputArray, size_t inputSize,
         }
         if (j == *outputSize) {
             if (j == actualSize) {
-                int** newOutputNumbers = realloc(outputArray[0], actualSize * 2);
-                int** newOutputFrequences = realloc(outputArray[1], actualSize * 2);
+                int** newOutputNumbers = realloc(outputArray[0],
+                                                 actualSize * 2);
+                int** newOutputFrequences = realloc(outputArray[1],
+                                                    actualSize * 2);
 
                 if (newOutputNumbers == NULL || newOutputFrequences == NULL) {
                     free(outputArray[0]);
@@ -62,6 +64,6 @@ int MakeHistogram(int* inputArray, size_t inputSize,
             ++*outputSize;
         }
     }
-    
+
     return EXIT_SUCCESS;
 }

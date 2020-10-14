@@ -4,7 +4,7 @@ set(PROJECT_NAME DZ1)
 project(${PROJECT_NAME})
 
 set(CMAKE_CXX_STANDARD 11)
-set(CMAKE_C_STANDARD 99)
+set(CMAKE_C_STANDARD 11)
 
 #----------------------------------------------------------------------------
 # Define project sources and includes

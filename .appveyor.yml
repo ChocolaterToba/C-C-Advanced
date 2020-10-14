@@ -40,10 +40,11 @@ build_script:
     - cmake .. -DENABLE_TESTING=ON -DENABLE_COVERAGE=ON
     - cmake --build .
     - make coverage
+    - cpplint ../src/* ../include/* ../test/main.cpp
 
 test_script:
     # скрипт тестирования проекта:
-    - ctest
+    - ctest -T memcheck
 
 deploy:
     # выкладываем tagged-коммиты на GitHub Releases:

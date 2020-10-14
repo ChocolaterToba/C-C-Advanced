@@ -10,4 +10,4 @@
 //      outputSize - size of outputArray[0] and outputArray[1]
 //  out: outfile
 //  Function returns EXIT_SUCCESS on success, EXIT_FAILURE on failure
-int Processo (FILE* outfile, int** outputArray[2], size_t outputSize);
+int Processo(FILE* outfile, int** outputArray[2], size_t outputSize);

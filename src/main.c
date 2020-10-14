@@ -14,7 +14,8 @@ int main() {
 
     int** outputArray[2] = {NULL, NULL};
     size_t outputSize = 0;
-    if (MakeHistogram(inputArray, inputSize, outputArray, &outputSize) == EXIT_FAILURE) {
+    if (MakeHistogram(inputArray, inputSize, outputArray, &outputSize) ==
+        EXIT_FAILURE) {
         free(inputArray);
         return EXIT_FAILURE;
     }

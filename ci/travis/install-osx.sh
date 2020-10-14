@@ -2,3 +2,6 @@ ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/
 
 brew install python
 sudo pip install gcovr
+sudo pip install cpplint
+
+brew install valgrind

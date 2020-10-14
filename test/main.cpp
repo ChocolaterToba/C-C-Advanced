@@ -1,9 +1,9 @@
+#include <gtest/gtest.h>
+
 #include <fstream>
 #include <iterator>
 #include <string>
 #include <algorithm>
-
-#include <gtest/gtest.h>
 
 extern "C" {
 #include "make_histogram.h"
@@ -12,20 +12,19 @@ extern "C" {
 #include "processo.h"
 }
 
-
 bool compareFiles(const std::string& p1, const std::string& p2) {
   std::ifstream f1(p1, std::ifstream::binary|std::ifstream::ate);
   std::ifstream f2(p2, std::ifstream::binary|std::ifstream::ate);
 
   if (f1.fail() || f2.fail()) {
-    return false; //file problem
+    return false;  //  file problem
   }
 
   if (f1.tellg() != f2.tellg()) {
-    return false; //size mismatch
+    return false;  //  size mismatch
   }
 
-  //seek back to beginning and use std::equal to compare contents
+  //  seek back to beginning and use std::equal to compare contents
   f1.seekg(0, std::ifstream::beg);
   f2.seekg(0, std::ifstream::beg);
   return std::equal(std::istreambuf_iterator<char>(f1.rdbuf()),

@@ -18,3 +18,6 @@ wget https://bootstrap.pypa.io/get-pip.py
 sudo python3.6 get-pip.py
 
 sudo python3.6 -m pip install git+https://github.com/gcovr/gcovr.git
+sudo python3.6 -m pip install cpplint
+
+sudo apt-get install valgrind
