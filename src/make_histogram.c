@@ -1,69 +1,70 @@
 #include <stdlib.h>
 #include "nesting_free.h"
 
-int MakeHistogram(int* inputArray, size_t inputSize,
-                  int** outputArray[2], size_t* outputSize) {
-    if (!inputArray || !outputArray || !outputSize ) {
+int MakeHistogram(int* input_array, size_t input_size,
+                  int** output_array[2], size_t* output_size) {
+    if (!input_array || !output_array || !output_size) {
         return EXIT_FAILURE;
     }
-    if (!outputArray[0] || !outputArray[1]) {
-        return EXIT_FAILURE;
-    }
-
-    *outputSize = 0;
-    size_t actualSize = 8;
-    outputArray[0] = (int**) calloc(actualSize, sizeof(int*));
-    if (!outputArray[0]) {
+    if (output_array[0] || output_array[1]) {
         return EXIT_FAILURE;
     }
 
-    outputArray[1] = (int**) calloc(actualSize, sizeof(int*));
-    if (!outputArray[1]) {
-        free(outputArray[0]);
-        outputArray[0] = NULL;
+    *output_size = 0;
+    size_t actual_size = 8;
+    output_array[0] = (int**) calloc(actual_size, sizeof(int*));
+    if (!output_array[0]) {
         return EXIT_FAILURE;
     }
 
-    for (size_t i = 0; i < inputSize; ++i) {
+    output_array[1] = (int**) calloc(actual_size, sizeof(int*));
+    if (!output_array[1]) {
+        free(output_array[0]);
+        output_array[0] = NULL;
+        return EXIT_FAILURE;
+    }
+
+    for (size_t i = 0; i < input_size; ++i) {
         size_t j = 0;
-        for (; j < *outputSize; ++j) {
-            if (*outputArray[0][j] == inputArray[i]) {
-                ++*outputArray[1][j];
+        for (; j < *output_size; ++j) {
+            if (*output_array[0][j] == input_array[i]) {
+                ++*output_array[1][j];
                 break;
             }
         }
-        if (j == *outputSize) {
-            if (j == actualSize) {
-                int** newOutputNumbers = realloc(outputArray[0],
-                                                 sizeof(int*) * actualSize * 2);
-                int** newOutputFreq = realloc(outputArray[1],
-                                              sizeof(int*) * actualSize * 2);
+        if (j == *output_size) {
+            if (j == actual_size) {
+                int** new_output_numbers = realloc(output_array[0],
+                                                   sizeof(int*) *
+                                                   actual_size * 2);
+                int** new_output_freq = realloc(output_array[1],
+                                              sizeof(int*) * actual_size * 2);
 
-                if (!newOutputNumbers || !newOutputFreq) {
-                    free(outputArray[0]);
-                    NestingFree(outputArray[1], j);
-                    outputArray[0] = NULL;
-                    outputArray[1] = NULL;
+                if (!new_output_numbers || !new_output_freq) {
+                    free(output_array[0]);
+                    NestingFree(output_array[1], j);
+                    output_array[0] = NULL;
+                    output_array[1] = NULL;
                     return EXIT_FAILURE;
                 }
 
-                outputArray[0] = newOutputNumbers;
-                outputArray[1] = newOutputFreq;
-                actualSize *= 2;
+                output_array[0] = new_output_numbers;
+                output_array[1] = new_output_freq;
+                actual_size *= 2;
             }
 
-            outputArray[1][j] = (int*) malloc(sizeof(int));
-            if (!outputArray[1][j]) {
-                free(outputArray[0]);
-                NestingFree(outputArray[1], j);
-                outputArray[0] = NULL;
-                outputArray[1] = NULL;
+            output_array[1][j] = (int*) malloc(sizeof(int));
+            if (!output_array[1][j]) {
+                free(output_array[0]);
+                NestingFree(output_array[1], j);
+                output_array[0] = NULL;
+                output_array[1] = NULL;
                 return EXIT_FAILURE;
             }
 
-            outputArray[0][j] = inputArray + i;
-            *outputArray[1][j] = 1;
-            ++*outputSize;
+            output_array[0][j] = input_array + i;
+            *output_array[1][j] = 1;
+            ++*output_size;
         }
     }
 
