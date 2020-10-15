@@ -2,4 +2,4 @@
 
 #include <stdlib.h>
 
-void NestingFree(int** array, size_t size);
+void nesting_free(int** array, size_t size);

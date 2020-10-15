@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-int Processo(FILE* outfile, int** output_array[2], size_t output_size) {
+int process_output(FILE* outfile, int** output_array[2], size_t output_size) {
     if (!outfile || !output_array) {
         return EXIT_FAILURE;
     }

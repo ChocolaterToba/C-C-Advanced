@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include "nesting_free.h"
 
-int MakeHistogram(int* input_array, size_t input_size,
+int make_histogram(int* input_array, size_t input_size,
                   int** output_array[2], size_t* output_size) {
     if (!input_array || !output_array || !output_size) {
         return EXIT_FAILURE;
@@ -42,7 +42,7 @@ int MakeHistogram(int* input_array, size_t input_size,
 
                 if (!new_output_numbers || !new_output_freq) {
                     free(output_array[0]);
-                    NestingFree(output_array[1], j);
+                    nesting_free(output_array[1], j);
                     output_array[0] = NULL;
                     output_array[1] = NULL;
                     return EXIT_FAILURE;
@@ -56,7 +56,7 @@ int MakeHistogram(int* input_array, size_t input_size,
             output_array[1][j] = (int*) malloc(sizeof(int));
             if (!output_array[1][j]) {
                 free(output_array[0]);
-                NestingFree(output_array[1], j);
+                nesting_free(output_array[1], j);
                 output_array[0] = NULL;
                 output_array[1] = NULL;
                 return EXIT_FAILURE;

@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-int Processi(FILE* infile, int** input_array, size_t* input_size) {
+int process_input(FILE* infile, int** input_array, size_t* input_size) {
     if (!infile || !input_array || !input_size) {
         return EXIT_FAILURE;
     }

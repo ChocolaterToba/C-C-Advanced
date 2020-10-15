@@ -11,9 +11,8 @@ set(CMAKE_C_STANDARD 11)
 #----------------------------------------------------------------------------
 set(COMMON_INCLUDES include)
 include_directories(${COMMON_INCLUDES})
-file(GLOB SRC_FILES src/*.c)
-file(GLOB TEST_SRC_FILES test/*.cpp)
-list(REMOVE_ITEM SRC_FILES src/main.c)
+file(GLOB SRC_FILES src/make_histogram.c src/nesting_free.c src/process_input.c src/process_output.c)
+file(GLOB TEST_SRC_FILES test/main.cpp)
 
 ################################
 # Normal Libraries
