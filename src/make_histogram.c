@@ -3,22 +3,22 @@
 
 int MakeHistogram(int* inputArray, size_t inputSize,
                   int** outputArray[2], size_t* outputSize) {
-    if (inputArray == NULL || outputArray == NULL || outputSize == NULL) {
+    if (!inputArray || !outputArray || !outputSize ) {
         return EXIT_FAILURE;
     }
-    if (outputArray[0] != NULL || outputArray[1] != NULL) {
+    if (!outputArray[0] || !outputArray[1]) {
         return EXIT_FAILURE;
     }
 
     *outputSize = 0;
     size_t actualSize = 8;
     outputArray[0] = (int**) calloc(actualSize, sizeof(int*));
-    if (outputArray[0] == NULL) {
+    if (!outputArray[0]) {
         return EXIT_FAILURE;
     }
 
     outputArray[1] = (int**) calloc(actualSize, sizeof(int*));
-    if (outputArray[1] == NULL) {
+    if (!outputArray[1]) {
         free(outputArray[0]);
         outputArray[0] = NULL;
         return EXIT_FAILURE;
@@ -39,7 +39,7 @@ int MakeHistogram(int* inputArray, size_t inputSize,
                 int** newOutputFreq = realloc(outputArray[1],
                                               sizeof(int*) * actualSize * 2);
 
-                if (newOutputNumbers == NULL || newOutputFreq == NULL) {
+                if (!newOutputNumbers || !newOutputFreq) {
                     free(outputArray[0]);
                     NestingFree(outputArray[1], j);
                     outputArray[0] = NULL;
@@ -53,7 +53,7 @@ int MakeHistogram(int* inputArray, size_t inputSize,
             }
 
             outputArray[1][j] = (int*) malloc(sizeof(int));
-            if (outputArray[1][j] == NULL) {
+            if (!outputArray[1][j]) {
                 free(outputArray[0]);
                 NestingFree(outputArray[1], j);
                 outputArray[0] = NULL;

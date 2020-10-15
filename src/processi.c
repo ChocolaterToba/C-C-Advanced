@@ -2,10 +2,10 @@
 #include <stdio.h>
 
 int Processi(FILE* infile, int** inputArray, size_t* inputSize) {
-    if (infile == NULL || inputArray == NULL || inputSize == NULL) {
+    if (!infile || !inputArray || !inputSize) {
         return EXIT_FAILURE;
     }
-    if (*inputArray != NULL) {  //  Array is already initialised.
+    if (*inputArray) {  //  Array is already initialised.
         return EXIT_FAILURE;
     }
 
@@ -14,7 +14,7 @@ int Processi(FILE* infile, int** inputArray, size_t* inputSize) {
     }
 
     *inputArray = (int*) calloc(*inputSize, sizeof(int));
-    if (*inputArray == NULL) {
+    if (!*inputArray) {
         return EXIT_FAILURE;
     }
 

@@ -2,10 +2,10 @@
 #include <stdio.h>
 
 int Processo(FILE* outfile, int** outputArray[2], size_t outputSize) {
-    if (outfile == NULL || outputArray == NULL) {
+    if (!outfile || !outputArray) {
         return EXIT_FAILURE;
     }
-    if (outputArray[0] == NULL || outputArray[1] == NULL) {
+    if (!outputArray[0] || !outputArray[1]) {
         return EXIT_FAILURE;
     }
 
