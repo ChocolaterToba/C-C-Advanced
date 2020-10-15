@@ -5,6 +5,9 @@ int Processo(FILE* outfile, int** outputArray[2], size_t outputSize) {
     if (outfile == NULL || outputArray == NULL) {
         return EXIT_FAILURE;
     }
+    if (outputArray[0] == NULL || outputArray[1] == NULL) {
+        return EXIT_FAILURE;
+    }
 
     if (fprintf(outfile, "Numbers: [") != 10) {
         return EXIT_FAILURE;

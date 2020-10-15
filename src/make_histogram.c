@@ -36,10 +36,10 @@ int MakeHistogram(int* inputArray, size_t inputSize,
             if (j == actualSize) {
                 int** newOutputNumbers = realloc(outputArray[0],
                                                  sizeof(int*) * actualSize * 2);
-                int** newOutputFrequences = realloc(outputArray[1],
-                                                    sizeof(int*) * actualSize * 2);
+                int** newOutputFreq = realloc(outputArray[1],
+                                              sizeof(int*) * actualSize * 2);
 
-                if (newOutputNumbers == NULL || newOutputFrequences == NULL) {
+                if (newOutputNumbers == NULL || newOutputFreq == NULL) {
                     free(outputArray[0]);
                     NestingFree(outputArray[1], j);
                     outputArray[0] = NULL;
@@ -48,7 +48,7 @@ int MakeHistogram(int* inputArray, size_t inputSize,
                 }
 
                 outputArray[0] = newOutputNumbers;
-                outputArray[1] = newOutputFrequences;
+                outputArray[1] = newOutputFreq;
                 actualSize *= 2;
             }
 
