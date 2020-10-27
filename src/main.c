@@ -1,8 +1,9 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <time.h>
-#include "single_thread_lib.h"
-#include "multi_thread_lib.h"
+#include <string.h>
+#include "single_thread.h"
+// #include "multi_thread.h"
 
 typedef enum {
     SINGLE_THREAD,
@@ -12,21 +13,23 @@ typedef enum {
 int main(int argc, char* argv[]) {
     run_options option = SINGLE_THREAD;
     size_t array_len = 1 << 20;
-    if (argc >= 1) {
-        if (argv[1] == "-multi-thread") {
+    if (argc >= 2) {
+        if (strcmp(argv[1], "-single-thread") == 0) {
+            option = SINGLE_THREAD;
+        } else if (strcmp(argv[1], "-multi-thread") == 0) {
             option = MULTI_THREAD;
-        } else if (argv[1] != "-single-thread") {
-            printf("Unknown option -%s\n", argv[1]);
+        } else {
+            printf("Unknown option %s\n", argv[1]);
             printf("Usage: DZ2 [-multi-thread | -single-thread] [length]\n\n");
             return EXIT_FAILURE;
         }
 
-        if (argc == 2) {
+        if (argc == 3) {
             if (sscanf(argv[2], "%zu", &array_len) != 1) {
                 printf("Error: length should be a positive integer.\n\n");
                 return EXIT_FAILURE;
             }
-        } else {
+        } else if (argc != 2) {
             printf("%d options passed. Should be 2 or less", argc);
             printf("Usage: DZ2 [-multi-thread | -single-thread] [length]\n\n");
             return EXIT_FAILURE;
@@ -34,6 +37,10 @@ int main(int argc, char* argv[]) {
     }
 
     int* array = calloc(array_len, sizeof(int));
+    if (array == NULL) {
+        printf("Could not allocate memory for array\n");
+        return EXIT_FAILURE;
+    }
 
     clock_t start = clock();
     clock_t end;
@@ -45,13 +52,16 @@ int main(int argc, char* argv[]) {
             }
             break;
         case MULTI_THREAD:
-            if (MultiThreadFill(array, array_len) == EXIT_FAILURE) {
-                free(array);
-                return EXIT_FAILURE;
-            }
+            //if (MultiThreadFill(array, array_len) == EXIT_FAILURE) {
+            //    free(array);
+            //    return EXIT_FAILURE;
+            //}
             break;
     }
+
     end = clock();
-    printf("Total time: %f seconds\n\n", (end - start) / CLOCKS_PER_SEC);
+    printf("Filling time: %f seconds\n\n",
+           (double)(end - start) / CLOCKS_PER_SEC);
+    free(array);
     return EXIT_SUCCESS;
 }

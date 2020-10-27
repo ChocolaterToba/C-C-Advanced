@@ -11,26 +11,34 @@ set(CMAKE_C_STANDARD 11)
 #----------------------------------------------------------------------------
 set(COMMON_INCLUDES include)
 include_directories(${COMMON_INCLUDES})
-file(GLOB SRC_FILES srcsrcsrcsrc)
+
+# file(GLOB SRC_FILES srcsrcsrc)
+
 file(GLOB TEST_SRC_FILES test/main.cpp)
 
 ################################
-# Normal Libraries
+# Static Single-Thread Library
 ################################
-add_library(${PROJECT_NAME}_lib ${SRC_FILES})
+file(GLOB STATIC_LIB_SRC_FILES
+     single_thread/src/single_thread.c
+)
+add_library(${PROJECT_NAME}_static_lib STATIC ${STATIC_LIB_SRC_FILES})
+target_include_directories(${PROJECT_NAME}_static_lib PUBLIC
+                           ${PROJECT_SOURCE_DIR}/single_thread/include
+)
 
 ################################
 # Main Project
 ################################
 add_executable(${PROJECT_NAME} src/main.c)
-target_link_libraries(${PROJECT_NAME} ${PROJECT_NAME}_lib)
+target_link_libraries(${PROJECT_NAME} ${PROJECT_NAME}_static_lib)
 
 ################################
 # Testing
 ################################
 
 # Options. Turn on with 'cmake -Dmyvarname=ON'.
-#                       'cmake -TESTING=ON'.
+#                       'cmake -DENABLE_TESTING=ON'.
 option(ENABLE_TESTING "Build all tests." OFF) # Makes boolean 'test' available.
 
 if (ENABLE_TESTING)
@@ -49,7 +57,7 @@ if (ENABLE_TESTING)
   # Link runTests with what we want to test and the GTest and DZ1 library
   add_executable(runTests ${TEST_SRC_FILES})
   target_link_libraries(runTests gtest_main pthread)
-  target_link_libraries(runTests ${PROJECT_NAME}_lib)
+  target_link_libraries(runTests ${PROJECT_NAME}_static_lib)
 
   gtest_discover_tests(runTests)
 
