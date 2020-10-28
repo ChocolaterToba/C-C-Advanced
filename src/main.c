@@ -2,37 +2,64 @@
 #include <stdio.h>
 #include <time.h>
 #include <string.h>
+#include <getopt.h>
 #include "single_thread.h"
-// #include "multi_thread.h"
+#include "multi_thread.h"
 
 typedef enum {
     SINGLE_THREAD,
     MULTI_THREAD
-} run_options;
+} thread_options;
 
 int main(int argc, char* argv[]) {
-    run_options option = SINGLE_THREAD;
+    thread_options thread_option = SINGLE_THREAD;
     size_t array_len = 1 << 20;
-    if (argc >= 2) {
-        if (strcmp(argv[1], "-single-thread") == 0) {
-            option = SINGLE_THREAD;
-        } else if (strcmp(argv[1], "-multi-thread") == 0) {
-            option = MULTI_THREAD;
-        } else {
-            printf("Unknown option %s\n", argv[1]);
-            printf("Usage: DZ2 [-multi-thread | -single-thread] [length]\n\n");
-            return EXIT_FAILURE;
-        }
 
-        if (argc == 3) {
-            if (sscanf(argv[2], "%zu", &array_len) != 1) {
-                printf("Error: length should be a positive integer.\n\n");
+    char* opts = "-:";
+
+    int opt = 0;
+    int option_index = 0;
+
+    static struct option long_options[] = {
+        {"thread", required_argument, NULL, 't'},
+        {NULL, 0, NULL, 0}
+    };
+
+    while ((opt = getopt_long(argc, argv, opts, long_options,
+                               &option_index)) != -1) {
+        switch (opt) {
+            case 't':
+                if (optarg == 0) {
+                    printf("Parameter thread must have an option\n");
+                    printf("Usage: DZ2 [--thread=single|multi] [array_len]\n");
+                    return EXIT_FAILURE;
+                }
+                if (strcasecmp(optarg, "single")) {
+                    thread_option = SINGLE_THREAD;
+                } else if (strcasecmp(optarg, "multi")) {
+                    thread_option = MULTI_THREAD;
+                } else {
+                    printf("Incorrect thread option\n");
+                    printf("Usage: DZ2 [--thread=single|multi] [array_len]\n");
+                    return EXIT_FAILURE;
+                }
+                break;
+
+            case 1:
+                if (sscanf(optarg, "%zu", &array_len) != 1) {
+                    printf("Incorrect array size\n");
+                    printf("Usage: DZ2 [--thread=single|multi] [array_len]\n");
+                    return EXIT_FAILURE;
+                }
+                break;
+
+            case '?':
+                printf("Unknown option\n");
+                printf("Usage: DZ2 [--thread=single|multi] [array_len]\n");
                 return EXIT_FAILURE;
-            }
-        } else if (argc != 2) {
-            printf("%d options passed. Should be 2 or less", argc);
-            printf("Usage: DZ2 [-multi-thread | -single-thread] [length]\n\n");
-            return EXIT_FAILURE;
+
+            default:
+                break;
         }
     }
 
@@ -44,7 +71,7 @@ int main(int argc, char* argv[]) {
 
     clock_t start = clock();
     clock_t end;
-    switch (option) {
+    switch (thread_option) {
         case SINGLE_THREAD:
             if (SingleThreadFill(array, array_len) == EXIT_FAILURE) {
                 free(array);
@@ -52,10 +79,10 @@ int main(int argc, char* argv[]) {
             }
             break;
         case MULTI_THREAD:
-            //if (MultiThreadFill(array, array_len) == EXIT_FAILURE) {
-            //    free(array);
-            //    return EXIT_FAILURE;
-            //}
+            if (MultiThreadFill(array, array_len) == EXIT_FAILURE) {
+                free(array);
+                return EXIT_FAILURE;
+            }
             break;
     }
 

@@ -28,10 +28,22 @@ target_include_directories(${PROJECT_NAME}_static_lib PUBLIC
 )
 
 ################################
+# Dynamic Multi-Thread Library
+################################
+file(GLOB DYNAMIC_LIB_SRC_FILES
+     multi_thread/src/multi_thread.c
+)
+add_library(${PROJECT_NAME}_dynamic_lib SHARED ${DYNAMIC_LIB_SRC_FILES})
+target_include_directories(${PROJECT_NAME}_dynamic_lib PUBLIC
+                           ${PROJECT_SOURCE_DIR}/multi_thread/include
+)
+
+################################
 # Main Project
 ################################
 add_executable(${PROJECT_NAME} src/main.c)
 target_link_libraries(${PROJECT_NAME} ${PROJECT_NAME}_static_lib)
+target_link_libraries(${PROJECT_NAME} ${PROJECT_NAME}_dynamic_lib)
 
 ################################
 # Testing
