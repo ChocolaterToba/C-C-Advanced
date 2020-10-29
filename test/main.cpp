@@ -1,6 +1,14 @@
 #include <gtest/gtest.h>
+
 #include <fstream>
 #include <string>
+
+extern "C" {
+#include "thread_options.h"
+#include "process_input.h"
+#include "single_thread.h"
+#include "multi_thread.h"
+}
 
 bool compareFiles(const std::string& p1, const std::string& p2) {
   std::ifstream f1(p1, std::ifstream::binary|std::ifstream::ate);
@@ -23,6 +31,106 @@ bool compareFiles(const std::string& p1, const std::string& p2) {
 }
 
 const std::string TESTFILES_PATH = "../test/testfiles/";
+
+TEST(SingleThreadTesting, test1) {
+    std::ifstream infile(TESTFILES_PATH + "Test1in.txt");
+    std::ofstream result(TESTFILES_PATH + "Test1out.txt");
+    ASSERT_TRUE(infile && result) << "Could not open input"
+                                  << std::endl;
+
+    char* argv[3];
+    int argc = 0;
+    std::string temp = "";
+    for (size_t i = 0; i < 3; ++i) {
+        if (infile >> temp) {
+            argv[i] = new char[temp.size() + 1];
+            strncpy(argv[i], temp.c_str(), temp.size() + 1);
+            ++argc;
+        } else {
+            break;
+        }
+    }
+
+    thread_options thread_option = SINGLE_THREAD;
+    size_t array_len = 1 << 24;
+    process_input(argc, argv, &thread_option, &array_len);
+    for (size_t i = 0; i < argc; ++i) {
+        delete[] argv[i];
+    }
+
+    int* array = new int[array_len];
+    clock_t start = clock();
+    clock_t end;
+    single_thread_fill(array, array_len);
+    end = clock();
+    std::cout << "Filling time: "
+              << static_cast<double>((end - start) / CLOCKS_PER_SEC)
+              << std::endl;
+
+    for (size_t i = 0; i < array_len; ++i) {
+        result << array[i] << ' ';
+    }
+    result << std::endl;
+
+    delete[] array;
+    infile.close();
+    result.close();
+
+    EXPECT_TRUE(compareFiles(TESTFILES_PATH + "Test1out.txt",
+                             TESTFILES_PATH + "Test1expected.txt"))
+               << "Output did not match expectations" << std::endl;
+    remove((TESTFILES_PATH + "Test1out.txt").c_str());
+}
+
+TEST(MultiThreadTesting, test1) {
+    std::ifstream infile(TESTFILES_PATH + "Test1in.txt");
+    std::ofstream result(TESTFILES_PATH + "Test1out.txt");
+    ASSERT_TRUE(infile && result) << "Could not open input"
+                                  << std::endl;
+
+    char* argv[3];
+    int argc = 0;
+    std::string temp = "";
+    for (size_t i = 0; i < 3; ++i) {
+        if (infile >> temp) {
+            argv[i] = new char[temp.size() + 1];
+            strncpy(argv[i], temp.c_str(), temp.size() + 1);
+            ++argc;
+        } else {
+            break;
+        }
+    }
+
+    thread_options thread_option = SINGLE_THREAD;
+    size_t array_len = 1 << 24;
+    process_input(argc, argv, &thread_option, &array_len);
+    for (size_t i = 0; i < argc; ++i) {
+        delete[] argv[i];
+    }
+
+    int* array = new int[array_len];
+    clock_t start = clock();
+    clock_t end;
+    multi_thread_fill(array, array_len);
+    end = clock();
+    std::cout << "Filling time: "
+              << static_cast<double>((end - start) / CLOCKS_PER_SEC)
+              << std::endl;
+
+    for (size_t i = 0; i < array_len; ++i) {
+        result << array[i] << ' ';
+    }
+    result << std::endl;
+
+    delete[] array;
+    infile.close();
+    result.close();
+
+    EXPECT_TRUE(compareFiles(TESTFILES_PATH + "Test1out.txt",
+                             TESTFILES_PATH + "Test1expected.txt"))
+               << "Output did not match expectations" << std::endl;
+    remove((TESTFILES_PATH + "Test1out.txt").c_str());
+}
 
 int main(int argc, char **argv) {
     testing::InitGoogleTest(&argc, argv);

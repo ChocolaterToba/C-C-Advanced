@@ -1,4 +1,4 @@
-dist:     focal    # используем Ubuntu 20.4 Focal
+dist:      focal    # используем Ubuntu 20.4 Focal
 osx_image: xcode12.2
 
 addons:
@@ -52,7 +52,9 @@ script:
     - cmake --build .
     - ctest -T memcheck
     - make coverage
-    - cpplint ../src/* ../include/* ../test/main.cpp
+    - cpplint ../src/* ../include/* ../test/main.cpp  #  Проводим через линтеры основные файлы,
+    - cpplint ../single_thread/src/* ../single_thread/include/*  #  файлы однопоточной библиотеки,
+    - cpplint ../multi_thread/src/* ../multi_thread/include/*  #  и файлы многопоточной библиотеки
 
 deploy:
     # выкладываем tagged-коммиты на GitHub Releases:

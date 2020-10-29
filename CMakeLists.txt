@@ -12,7 +12,7 @@ set(CMAKE_C_STANDARD 11)
 set(COMMON_INCLUDES include)
 include_directories(${COMMON_INCLUDES})
 
-file(GLOB SRC_FILES src/main.c src/process_input.c)
+file(GLOB SRC_FILES src/process_input.c)
 
 file(GLOB TEST_SRC_FILES test/main.cpp)
 
@@ -44,7 +44,7 @@ target_link_libraries(${PROJECT_NAME}_dynamic_lib pthread)
 ################################
 # Main Project
 ################################
-add_executable(${PROJECT_NAME} ${SRC_FILES})
+add_executable(${PROJECT_NAME} ${SRC_FILES} src/main.c)
 target_link_libraries(${PROJECT_NAME} ${PROJECT_NAME}_static_lib)
 target_link_libraries(${PROJECT_NAME} ${PROJECT_NAME}_dynamic_lib)
 
@@ -70,9 +70,11 @@ if (ENABLE_TESTING)
   include(CTest)
  
   # Link runTests with what we want to test and the GTest and DZ1 library
-  add_executable(runTests ${TEST_SRC_FILES})
+  add_executable(runTests ${TEST_SRC_FILES} ${SRC_FILES})
   target_link_libraries(runTests gtest_main pthread)
-  target_link_libraries(runTests PRIVATE ${PROJECT_NAME}_static_lib)
+
+  target_link_libraries(runTests ${PROJECT_NAME}_static_lib)
+  target_link_libraries(runTests ${PROJECT_NAME}_dynamic_lib)
 
   gtest_discover_tests(runTests)
 
