@@ -80,7 +80,10 @@ int multi_thread_fill(int* array, size_t array_len) {
     }
     unsigned threads_amount = getNumCores();
 
-    size_t batch_size = array_len / threads_amount + 1;
+
+
+    size_t batch_size = 0;
+    batch_size = array_len / threads_amount;
 
     pthread_t* threads = calloc(threads_amount, sizeof(pthread_t));
     for (size_t i = 0; i < threads_amount; ++i) {
@@ -92,14 +95,13 @@ int multi_thread_fill(int* array, size_t array_len) {
         }
 
         info->start = array + i * batch_size;
-        info->batch_size = batch_size;
-        if (i == threads_amount - 1) {
-            if (threads_amount * batch_size > array_len) {
-                info->batch_size = array_len - i * batch_size;
-            }
+        if (i < threads_amount - 1) {
+            info->batch_size = batch_size;
+        } else {
+            info->batch_size = array_len - i * batch_size;
         }
 
-        info->starting_data = (i * batch_size) % threads_amount;
+        info->starting_data = (i * batch_size) % 4;
 
         if (pthread_create(threads + i, NULL, fill_batch, (void*) info) != 0) {
             for (size_t j = 0; j < i; ++j) {
