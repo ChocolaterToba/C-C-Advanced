@@ -80,10 +80,7 @@ int multi_thread_fill(int* array, size_t array_len) {
     }
     unsigned threads_amount = getNumCores();
 
-
-
-    size_t batch_size = 0;
-    batch_size = array_len / threads_amount;
+    size_t batch_size = array_len / threads_amount;
 
     pthread_t* threads = calloc(threads_amount, sizeof(pthread_t));
     for (size_t i = 0; i < threads_amount; ++i) {
@@ -115,13 +112,13 @@ int multi_thread_fill(int* array, size_t array_len) {
     }
 
     int status = 0;
+    int* status_p = &status;
     int return_value = EXIT_SUCCESS;
     for (size_t i = 0; i < threads_amount; ++i) {
-        if (pthread_join(threads[i], (void*) &status) != 0) {
+        if (pthread_join(threads[i], (void**) &(status_p)) != 0) {
             fprintf(stderr, "Could not join a thread\n");
             return_value = EXIT_FAILURE;
-        }
-        if (status == EXIT_FAILURE) {
+        } else if (status == EXIT_FAILURE) {
             fprintf(stderr, "Thread returned with failure\n");
             return_value = EXIT_FAILURE;
         }

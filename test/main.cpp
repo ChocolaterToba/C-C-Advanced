@@ -164,7 +164,7 @@ TEST(MultiThreadTesting, test1) {
 }
 
 TEST(ComparisonTests, test1) {
-    size_t array_len = 2 << 28;
+    size_t array_len = 1 << 24;
     int* arraySingle = new int[array_len];
     int* arrayMulti = new int[array_len];
 
