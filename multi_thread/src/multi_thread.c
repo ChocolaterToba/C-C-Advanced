@@ -45,6 +45,7 @@ int getNumCores() {
 typedef struct {
     int* start;
     size_t batch_size;
+    int starting_data;
 } thread_info;
 
 void* fill_batch(void* arg) {
@@ -53,7 +54,11 @@ void* fill_batch(void* arg) {
     }
 
     thread_info* info = arg;
-    int data = 0;
+    if (info->start == NULL) {
+        return (void*) EXIT_FAILURE;
+    }
+
+    int data = info->starting_data;
     for (size_t i = 0; i < info->batch_size; ++i) {
         info->start[i] = data;
 
@@ -93,6 +98,8 @@ int multi_thread_fill(int* array, size_t array_len) {
                 info->batch_size = array_len - i * batch_size;
             }
         }
+
+        info->starting_data = (i * batch_size) % threads_amount;
 
         if (pthread_create(threads + i, NULL, fill_batch, (void*) info) != 0) {
             for (size_t j = 0; j < i; ++j) {
