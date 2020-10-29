@@ -7,5 +7,6 @@ sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-8 80 /usr/bin/g
 
 sudo python3.6 -m pip install git+https://github.com/gcovr/gcovr.git
 sudo python3.6 -m pip install cpplint
+sudo python3.6 -m pip install gcovr
 
 sudo apt-get install valgrind

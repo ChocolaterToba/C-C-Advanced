@@ -25,24 +25,26 @@ int main(int argc, char* argv[]) {
 
     clock_t start = clock();
     clock_t end;
-    switch (thread_option) {
-        case SINGLE_THREAD:
-            if (single_thread_fill(array, array_len) == EXIT_FAILURE) {
-                free(array);
-                return EXIT_FAILURE;
-            }
-            break;
-        case MULTI_THREAD:
-            if (multi_thread_fill(array, array_len) == EXIT_FAILURE) {
-                free(array);
-                return EXIT_FAILURE;
-            }
-            break;
+    for (size_t i = 0; i < 10; ++i) {
+        switch (thread_option) {
+            case SINGLE_THREAD:
+                if (single_thread_fill(array, array_len) == EXIT_FAILURE) {
+                    free(array);
+                    return EXIT_FAILURE;
+                }
+                break;
+            case MULTI_THREAD:
+                if (multi_thread_fill(array, array_len) == EXIT_FAILURE) {
+                    free(array);
+                    return EXIT_FAILURE;
+                }
+                break;
+        }
     }
 
     end = clock();
-    printf("Filling time: %f seconds\n\n",
-           (double)(end - start) / CLOCKS_PER_SEC);
+    printf("Average filling time: %f seconds\n\n",
+           (double)(end - start) / CLOCKS_PER_SEC / 10);
     free(array);
     return EXIT_SUCCESS;
 }

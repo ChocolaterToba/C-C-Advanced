@@ -42,14 +42,17 @@ TEST(ProcessInputTesting, test1) {
     thread_options thread_option = SINGLE_THREAD;
     size_t array_len = 0;
 
-    ASSERT_EQ(process_input(0, argv, &thread_option, &array_len), EXIT_FAILURE);
-    ASSERT_EQ(process_input(3, NULL, &thread_option, &array_len), EXIT_FAILURE);
-    ASSERT_EQ(process_input(3, argv, NULL, &array_len), EXIT_FAILURE);
-    ASSERT_EQ(process_input(3, argv, &thread_option, NULL), EXIT_FAILURE);
-    ASSERT_EQ(process_input(3, argv, &thread_option, &array_len), EXIT_SUCCESS);
+    EXPECT_EQ(process_input(0, argv, &thread_option, &array_len), EXIT_FAILURE);
+    EXPECT_EQ(process_input(3, NULL, &thread_option, &array_len), EXIT_FAILURE);
+    EXPECT_EQ(process_input(3, argv, NULL, &array_len), EXIT_FAILURE);
+    EXPECT_EQ(process_input(3, argv, &thread_option, NULL), EXIT_FAILURE);
+    EXPECT_EQ(process_input(3, argv, &thread_option, &array_len), EXIT_SUCCESS);
 
-    ASSERT_EQ(thread_option, MULTI_THREAD);
-    ASSERT_EQ(array_len, 100);
+    EXPECT_EQ(thread_option, MULTI_THREAD);
+    EXPECT_EQ(array_len, 100);
+    for (size_t i = 0; i < 3; ++i) {
+        delete[] argv[i];
+    }
 }
 
 TEST(SingleThreadTesting, test1) {
