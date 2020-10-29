@@ -24,7 +24,7 @@ int process_input(int argc, char* argv[],
         {NULL, 0, NULL, 0}
     };
 
-    int optin = 1;
+    optind = 1;
 
     while ((opt = getopt_long(argc, argv, opts, long_options,
                                &option_index)) != -1) {

@@ -34,11 +34,13 @@ const std::string TESTFILES_PATH = "../test/testfiles/";
 
 TEST(ProcessInputTesting, test1) {
     std::string argvStrings[3] = {"test", "--thread=multi", "100"};
-    char* argv[3];
+    char* argv[4];
     for (size_t i = 0; i < 3; ++i) {
         argv[i] = new char[argvStrings[i].size() + 1];
         strncpy(argv[i], argvStrings[i].c_str(), argvStrings[i].size() + 1);
     }
+    argv[3] = nullptr;
+
     thread_options thread_option = SINGLE_THREAD;
     size_t array_len = 0;
 
@@ -61,7 +63,7 @@ TEST(SingleThreadTesting, test1) {
     ASSERT_TRUE(infile && result) << "Could not open input"
                                   << std::endl;
 
-    char* argv[3];
+    char* argv[4];
     int argc = 0;
     std::string temp = "";
     for (size_t i = 0; i < 3; ++i) {
@@ -73,10 +75,13 @@ TEST(SingleThreadTesting, test1) {
             break;
         }
     }
+    argv[argc] = NULL;
 
     thread_options thread_option = SINGLE_THREAD;
     size_t array_len = 1 << 24;
-    process_input(argc, argv, &thread_option, &array_len);
+
+    EXPECT_EQ(process_input(argc, argv, &thread_option, &array_len),
+              EXIT_SUCCESS);
     for (size_t i = 0; i < argc; ++i) {
         delete[] argv[i];
     }
@@ -111,7 +116,7 @@ TEST(MultiThreadTesting, test1) {
     ASSERT_TRUE(infile && result) << "Could not open input"
                                   << std::endl;
 
-    char* argv[3];
+    char* argv[4];
     int argc = 0;
     std::string temp = "";
     for (size_t i = 0; i < 3; ++i) {
@@ -123,10 +128,13 @@ TEST(MultiThreadTesting, test1) {
             break;
         }
     }
+    argv[argc] = nullptr;
 
     thread_options thread_option = SINGLE_THREAD;
     size_t array_len = 1 << 24;
-    process_input(argc, argv, &thread_option, &array_len);
+
+    EXPECT_EQ(process_input(argc, argv, &thread_option, &array_len),
+              EXIT_SUCCESS);
     for (size_t i = 0; i < argc; ++i) {
         delete[] argv[i];
     }
