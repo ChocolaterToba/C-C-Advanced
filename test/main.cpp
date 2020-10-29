@@ -32,6 +32,26 @@ bool compareFiles(const std::string& p1, const std::string& p2) {
 
 const std::string TESTFILES_PATH = "../test/testfiles/";
 
+TEST(ProcessInputTesting, test1) {
+    std::string argvStrings[3] = {"test", "--thread=multi", "100"};
+    char* argv[3];
+    for (size_t i = 0; i < 3; ++i) {
+        argv[i] = new char[argvStrings[i].size() + 1];
+        strncpy(argv[i], argvStrings[i].c_str(), argvStrings[i].size() + 1);
+    }
+    thread_options thread_option = SINGLE_THREAD;
+    size_t array_len = 0;
+
+    ASSERT_EQ(process_input(0, argv, &thread_option, &array_len), EXIT_FAILURE);
+    ASSERT_EQ(process_input(3, NULL, &thread_option, &array_len), EXIT_FAILURE);
+    ASSERT_EQ(process_input(3, argv, NULL, &array_len), EXIT_FAILURE);
+    ASSERT_EQ(process_input(3, argv, &thread_option, NULL), EXIT_FAILURE);
+    ASSERT_EQ(process_input(3, argv, &thread_option, &array_len), EXIT_SUCCESS);
+
+    ASSERT_EQ(thread_option, MULTI_THREAD);
+    ASSERT_EQ(array_len, 100);
+}
+
 TEST(SingleThreadTesting, test1) {
     std::ifstream infile(TESTFILES_PATH + "Test1in.txt");
     std::ofstream result(TESTFILES_PATH + "Test1out.txt");

@@ -8,7 +8,7 @@
 
 int process_input(int argc, char* argv[],
                   thread_options* thread_option, size_t* array_len) {
-    if (!argc || argv == NULL || thread_option == NULL || array_len == NULL) {
+    if (argc == 0 || argv == NULL || thread_option == NULL || array_len == NULL) {
         fprintf(stderr, "Incorrect arguments for process_input.\n");
         return EXIT_FAILURE;
     }
