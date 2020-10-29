@@ -163,6 +163,21 @@ TEST(MultiThreadTesting, test1) {
     remove((TESTFILES_PATH + "Test1out.txt").c_str());
 }
 
+TEST(ComparisonTests, test1) {
+    size_t array_len = 2 << 28;
+    int* arraySingle = new int[array_len];
+    int* arrayMulti = new int[array_len];
+
+    single_thread_fill(arraySingle, array_len);
+    multi_thread_fill(arrayMulti, array_len);
+    for (size_t i = 0; i < array_len; ++i) {
+        EXPECT_EQ(arraySingle[i], arrayMulti[i]);
+    }
+
+    delete[] arraySingle;
+    delete[] arrayMulti;
+}
+
 int main(int argc, char **argv) {
     testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
