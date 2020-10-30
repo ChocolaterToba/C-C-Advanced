@@ -111,16 +111,17 @@ int multi_thread_fill(int* array, size_t array_len) {
         }
     }
 
-    int status = 0;
-    int* status_p = &status;
+    int* status_p = NULL;
     int return_value = EXIT_SUCCESS;
     for (size_t i = 0; i < threads_amount; ++i) {
         if (pthread_join(threads[i], (void**) &(status_p)) != 0) {
             fprintf(stderr, "Could not join a thread\n");
             return_value = EXIT_FAILURE;
-        } else if (status == EXIT_FAILURE) {
-            fprintf(stderr, "Thread returned with failure\n");
-            return_value = EXIT_FAILURE;
+        } else if (status_p != NULL) {
+            if (*status_p == EXIT_FAILURE) {
+                fprintf(stderr, "Thread returned with failure\n");
+                return_value = EXIT_FAILURE;
+            }
         }
     }
 
