@@ -2,6 +2,8 @@
 
 #include <fstream>
 #include <string>
+#include <iomanip>
+#include <chrono>
 
 extern "C" {
 #include "thread_options.h"
@@ -87,12 +89,17 @@ TEST(SingleThreadTesting, test1) {
     }
 
     int* array = new int[array_len];
-    clock_t start = clock();
-    clock_t end;
+
+    std::chrono::system_clock::duration start =
+    std::chrono::system_clock::now().time_since_epoch();
+
     single_thread_fill(array, array_len);
-    end = clock();
+
+    std::chrono::system_clock::duration end =
+    std::chrono::system_clock::now().time_since_epoch();
     std::cout << "Filling time: "
-              << static_cast<double>((end - start) / CLOCKS_PER_SEC)
+              << std::fixed << std::setprecision(8)
+              << static_cast<double>((end - start).count())
               << std::endl;
 
     for (size_t i = 0; i < array_len; ++i) {
@@ -140,12 +147,17 @@ TEST(MultiThreadTesting, test1) {
     }
 
     int* array = new int[array_len];
-    clock_t start = clock();
-    clock_t end;
+
+    std::chrono::system_clock::duration start =
+    std::chrono::system_clock::now().time_since_epoch();
+
     multi_thread_fill(array, array_len);
-    end = clock();
+
+    std::chrono::system_clock::duration end =
+    std::chrono::system_clock::now().time_since_epoch();
     std::cout << "Filling time: "
-              << static_cast<double>((end - start) / CLOCKS_PER_SEC)
+              << std::fixed << std::setprecision(8)
+              << static_cast<double>((end - start).count())
               << std::endl;
 
     for (size_t i = 0; i < array_len; ++i) {

@@ -50,8 +50,8 @@ script:
     - cd build
     - cmake .. -DCMAKE_BUILD_TYPE=$BUILD_CONFIGURATION -DTARGET_CPU=$TARGET_CPU -DENABLE_TESTING=ON -DENABLE_COVERAGE=ON
     - cmake --build .
-    - ./DZ2 --thread=single 1000000000
-    - ./DZ2 --thread=multi 1000000000
+    - ./DZ2 --thread=single 100000000
+    - ./DZ2 --thread=multi 100000000
     - ctest -T memcheck
     - make coverage
     - cpplint ../src/* ../include/* ../test/main.cpp  #  Проводим через линтеры основные файлы,

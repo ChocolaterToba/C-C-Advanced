@@ -23,9 +23,10 @@ int main(int argc, char* argv[]) {
         return EXIT_FAILURE;
     }
 
-    clock_t start = clock();
-    clock_t end;
-    for (size_t i = 0; i < 10; ++i) {
+    struct timespec start;
+    clock_gettime(CLOCK_REALTIME, &start);
+    size_t loops_amount = 100;
+    for (size_t i = 0; i < loops_amount; ++i) {
         switch (thread_option) {
             case SINGLE_THREAD:
                 if (single_thread_fill(array, array_len) == EXIT_FAILURE) {
@@ -42,9 +43,12 @@ int main(int argc, char* argv[]) {
         }
     }
 
-    end = clock();
+    struct timespec end;
+    clock_gettime(CLOCK_REALTIME, &end);
     printf("Average filling time: %f seconds\n\n",
-           (double)(end - start) / CLOCKS_PER_SEC / 10);
+           ((double)(end.tv_sec - start.tv_sec) +
+            (double)(end.tv_nsec - start.tv_nsec) / 1000000000L)
+            / loops_amount);
     free(array);
     return EXIT_SUCCESS;
 }
