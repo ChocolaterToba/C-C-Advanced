@@ -1,0 +1,72 @@
+dist:      focal    # используем Ubuntu 20.4 Focal
+osx_image: xcode12.2
+
+addons:
+     snaps:
+       - name: cmake
+         confinement: classic
+         #channel: latest/candidate
+         channel: 3.18/candidate
+         #channel: 3.17/beta
+
+language: cpp
+
+os:
+    # будем прогонять CI и на Linux, и на Mac OS X...
+    - linux
+    - osx
+
+compiler:
+    # ... и с помощью GCC, и Clang
+    - gcc
+    - clang
+
+env:
+    # список переменных окружения, влияющих на матрицу сборки:
+    - TARGET_CPU=amd64 BUILD_CONFIGURATION=Debug
+    - TARGET_CPU=amd64 BUILD_CONFIGURATION=Release
+    - TARGET_CPU=x86 BUILD_CONFIGURATION=Debug
+    - TARGET_CPU=x86 BUILD_CONFIGURATION=Release
+
+matrix:
+    exclude:
+        # вручную исключим ненужные элементы из матрицы сборки:
+        - os:       osx
+          compiler: gcc
+
+        - os:  osx
+          env: TARGET_CPU=x86 BUILD_CONFIGURATION=Debug
+
+        - os:  osx
+          env: TARGET_CPU=x86 BUILD_CONFIGURATION=Release
+
+install:
+    # скрипт настройки среды и установки зависимостей:
+    - source ci/travis/install-$TRAVIS_OS_NAME.sh
+
+script:
+    # скрипт сборки и тестирования проекта:
+    - mkdir build
+    - cd build
+    - cmake .. -DCMAKE_BUILD_TYPE=$BUILD_CONFIGURATION -DTARGET_CPU=$TARGET_CPU -DENABLE_TESTING=ON -DENABLE_COVERAGE=ON
+    - cmake --build .
+    - ./DZ2 --thread=single 100000000
+    - ./DZ2 --thread=multi 100000000
+    - ctest -T memcheck
+    - make coverage
+    - cpplint ../src/* ../include/* ../test/main.cpp  #  Проводим через линтеры основные файлы,
+    - cpplint ../single_thread/src/* ../single_thread/include/*  #  файлы однопоточной библиотеки,
+    - cpplint ../multi_thread/src/* ../multi_thread/include/*  #  и файлы многопоточной библиотеки
+
+deploy:
+    # выкладываем tagged-коммиты на GitHub Releases:
+    provider:     releases
+    file:         <package-file>
+    cleanup: true
+    overwrite:    true
+
+    api_key:
+        secure:   <encrypted-github-token>
+
+    on:
+        tags:     true
